@@ -61,3 +61,20 @@ foreach ($contacts as $contact) {
 $count_contacts = count($contacts);
 echo "Contact table seeded with {$count_contacts} contacts" . PHP_EOL;
 
+
+// Seed Attendances tables
+
+echo 'Seeding Attendances table' . PHP_EOL;
+$attendances = [
+    ['contact_id' => '1' , 'jiri_id' => '1'],
+];
+$insert_attendance_in_attendances_table_sql = 'INSERT INTO attendances (contact_id, jiri_id) VALUES (:contact_id, :jiri_id)';
+$insert_attendance_in_attendances_table_stmt = $db->prepare($insert_attendance_in_attendances_table_sql);
+foreach ($attendances as $attendance) {
+    $insert_attendance_in_attendances_table_stmt->bindValue('contact_id', $attendance['contact_id']);
+    $insert_attendance_in_attendances_table_stmt->bindValue('jiri_id', $attendance['jiri_id']);
+    $insert_attendance_in_attendances_table_stmt->execute();
+}
+$count_attendances = count($attendances);
+echo "Attendances table seeded with {$count_attendances} attendances" . PHP_EOL;
+

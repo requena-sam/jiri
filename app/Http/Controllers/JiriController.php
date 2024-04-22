@@ -66,6 +66,8 @@ class JiriController
 
         $this->checkOwnerShip($jiri);
 
+        $jiri->contacts = $this->jiri->fetchContacts($jiri->id);
+
         view('jiris.show', compact('jiri'));
     }
 
@@ -119,11 +121,11 @@ class JiriController
 
     private function checkOwnerShip(mixed $jiri): void
     {
-        if (is_numeric($jiri)){
+        if (is_numeric($jiri)) {
             $jiri = $this->jiri->findOrFail($jiri);
         }
         if (Auth::id() !== $jiri->user_id) {
-        Response::abort(Response::UNAUTHORIZED);
+            Response::abort(Response::UNAUTHORIZED);
         }
     }
 }

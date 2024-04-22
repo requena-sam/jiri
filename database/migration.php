@@ -54,7 +54,7 @@ SQL;
 $db->exec($create_jiri_table_sql);
 echo 'Jiri table created' . PHP_EOL;
 
-// Create tables
+// Create  Contact tables
 
 
 echo 'Creating Contact table' . PHP_EOL;
@@ -72,6 +72,27 @@ $create_contact_table_sql = <<<SQL
     );
 SQL;
 
+// Create attendance Tables
+
 $db->exec($create_contact_table_sql);
 echo 'Contact table created' . PHP_EOL;
+
+echo 'Creating Attendances table' . PHP_EOL;
+$create_attendance_table_sql = <<<SQL
+    create table attendances
+    (
+        id          int unsigned auto_increment
+            primary key,
+        contact_id     int unsigned                        not null,
+        jiri_id     int unsigned                        not null,
+        created_at  timestamp default CURRENT_TIMESTAMP null,
+        updated_at  timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+        foreign key(contact_id) references contacts(id),
+        foreign key(jiri_id) references jiris(id)
+    );
+SQL;
+
+$db->exec($create_attendance_table_sql);
+echo 'Attendance table created' . PHP_EOL;
+
 

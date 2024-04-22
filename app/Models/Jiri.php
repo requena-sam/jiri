@@ -51,4 +51,19 @@ SQL;
         return $statement->fetchAll();
     }
 
+    public function fetchContacts(int $id): false|array
+    {
+        $sql = <<<SQL
+SELECT * FROM attendances
+LEFT JOIN contacts on attendances.contact_id = contacts.id
+WHERE attendances.jiri_id = :id;
+SQL;
+        $statement =
+            $this->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        return $statement->fetchAll();
+
+    }
+
 }
