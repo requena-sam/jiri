@@ -21,5 +21,34 @@ SQL;
         return $statement->fetchAll();
     }
 
+    public function upcomingBelongingTo(int $id): false|array
+    {
+        $sql = <<<SQL
+        SELECT * FROM $this->table 
+                 WHERE user_id = :id
+                 AND starting_at <= current_timestamp;
+
+SQL;
+        $statement =
+            $this->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    public function passedBelongingTo(int $id): false|array
+    {
+        $sql = <<<SQL
+        SELECT * FROM $this->table 
+                 WHERE user_id = :id
+                 AND starting_at >= current_timestamp;
+
+SQL;
+        $statement =
+            $this->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
 
 }

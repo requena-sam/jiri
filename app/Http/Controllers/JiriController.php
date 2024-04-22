@@ -25,32 +25,12 @@ class JiriController
     public function index(): void
     {
         $search = $_GET['search'] ?? '';
-        $jiris = $this->jiri->belongingTo(Auth::id());
-        $sql_upcoming_jiris = <<<SQL
-                SELECT * FROM jiris 
-                         WHERE name LIKE :search  
-                               AND starting_at > current_timestamp
-                SQL;
-        $statement_upcoming_jiris =
-            $this->jiri->prepare($sql_upcoming_jiris);
-        $statement_upcoming_jiris->bindValue(':search', "%{$search}%");
-        $statement_upcoming_jiris->execute();
         $upcoming_jiris =
-            $statement_upcoming_jiris->fetchAll();
-
-        $sql_passed_jiris = <<<SQL
-                SELECT * FROM jiris 
-                         WHERE name LIKE :search
-                             AND starting_at < current_timestamp
-                SQL;
-        $statement_passed_jiris =
-            $this->jiri->prepare($sql_passed_jiris);
-        $statement_passed_jiris->bindValue(':search', "%{$search}%");
-        $statement_passed_jiris->execute();
+            $this->jiri->upcomingBelongingTo(Auth::id());
         $passed_jiris =
-            $statement_passed_jiris->fetchAll();
-
-        view('jiris.index', compact('upcoming_jiris', 'passed_jiris','jiris'));
+            $this->jiri->passedBelongingTo(Auth::id());
+        $jiris = $this->jiri->belongingTo(Auth::id());
+        view('jiris.index', compact('upcoming_jiris', 'passed_jiris'));
     }
 
     public function create(): void

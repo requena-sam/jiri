@@ -42,15 +42,6 @@
                 'jiris' => $passed_jiris,
             ]) ?>
         </section>
-        <section>
-            <h2 class="font-bold">Mes Jiris</h2>
-            <?php
-            component('jiris.list', [
-                'title' => 'Mes Jiris',
-                'jiris' => $jiris,
-            ]) ?>
-        </section>
-
         <div>
             <a href="/jiri/create"
                class="underline text-blue-500">Créer un nouveau jiri</a>
