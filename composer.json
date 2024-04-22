@@ -1,0 +1,22 @@
+{
+  "name": "dominique/jiri",
+  "description": "An app to rule all the jiris",
+  "require": {
+    "php": "^8.2",
+    "ext-pdo": "*",
+    "ext-ctype": "*",
+    "nesbot/carbon": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Core\\": "core/",
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Dominique Vilain",
+      "email": "dominiquevilain@users.noreply.github.com"
+    }
+  ]
+}
