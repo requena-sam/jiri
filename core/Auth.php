@@ -25,4 +25,9 @@ class Auth
         $_SESSION['old']['email'] = $email;
         Response::redirect('/login');
     }
+
+    public static function id(): int
+    {
+     return $_SESSION['user']->id;
+    }
 }

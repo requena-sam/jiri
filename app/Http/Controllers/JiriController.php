@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jiri;
+use Core\Auth;
 use Core\Exceptions\FileNotFoundException;
 use Core\Response;
 use Core\Validator;
@@ -24,7 +25,7 @@ class JiriController
     public function index(): void
     {
         $search = $_GET['search'] ?? '';
-
+        $jiris = $this->jiri->belongingTo(Auth::id());
         $sql_upcoming_jiris = <<<SQL
                 SELECT * FROM jiris 
                          WHERE name LIKE :search  
@@ -49,7 +50,7 @@ class JiriController
         $passed_jiris =
             $statement_passed_jiris->fetchAll();
 
-        view('jiris.index', compact('upcoming_jiris', 'passed_jiris'));
+        view('jiris.index', compact('upcoming_jiris', 'passed_jiris','jiris'));
     }
 
     public function create(): void
@@ -113,7 +114,7 @@ class JiriController
 
         $this->jiri->update($id, $data);
 
-        Response::redirect('/jiri?id='.$id);
+        Response::redirect('/jiri?id=' . $id);
     }
 
     public function destroy(): void
