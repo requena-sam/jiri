@@ -1,6 +1,7 @@
+<?php /** @var TYPE_NAME $label */ ?>
 <form action="/">
     <label for="search"
-           class="font-bold">Nom du jiri</label>
+           class="font-bold"><?= $label ?></label>
     <input type="text"
            id="search"
            name="search"

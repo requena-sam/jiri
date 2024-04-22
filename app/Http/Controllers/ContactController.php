@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jiri;
+use App\Models\Contact;
 use Core\Auth;
 use Core\Exceptions\FileNotFoundException;
 use Core\Response;
 use Core\Validator;
 use JetBrains\PhpStorm\NoReturn;
 
-class JiriController
+class ContactController
 {
-    private Jiri $jiri;
+    private Contact $contact;
 
     public function __construct()
     {
         try {
-            $this->jiri = new Jiri(base_path('.env.local.ini'));
+            $this->contact = new Contact(base_path('.env.local.ini'));
         } catch (FileNotFoundException $exception) {
             die($exception->getMessage());
         }
@@ -25,17 +25,14 @@ class JiriController
     public function index(): void
     {
         $search = $_GET['search'] ?? '';
-        $upcoming_jiris =
-            $this->jiri->upcomingBelongingTo(Auth::id());
-        $passed_jiris =
-            $this->jiri->passedBelongingTo(Auth::id());
-        $jiris = $this->jiri->belongingTo(Auth::id());
-        view('jiris.index', compact('upcoming_jiris', 'passed_jiris'));
+        $contacts =
+            $this->contact->belongingTo(Auth::id());
+        view('contacts.index', compact('contacts'));
     }
 
     public function create(): void
     {
-        view('jiris.create');
+        view('contacts.create');
     }
 
     #[NoReturn] public function store(): void
@@ -43,12 +40,12 @@ class JiriController
 
         $data = Validator::check([
             'name' => 'required|min:3|max:255',
-            'starting_at' => 'required|datetime',
+            'email' => 'required|email',
         ]);
         $data['user_id'] = Auth::id();
 
-        if ($this->jiri->create($data)) {
-            Response::redirect('/jiris');
+        if ($this->contact->create($data)) {
+            Response::redirect('/contacts');
         } else {
             Response::abort(Response::SERVER_ERROR);
         }
@@ -62,11 +59,11 @@ class JiriController
         }
         $id = $_GET['id'];
 
-        $jiri = $this->jiri->findOrFail($id);
+        $contact = $this->contact->findOrFail($id);
 
-        $this->checkOwnerShip($jiri);
+        $this->checkOwnerShip($contact);
 
-        view('jiris.show', compact('jiri'));
+        view('contacts.show', compact('contact'));
     }
 
     public function edit(): void
@@ -77,11 +74,11 @@ class JiriController
         }
         $id = $_GET['id'];
 
-        $jiri = $this->jiri->findOrFail($id);
+        $contact = $this->contact->findOrFail($id);
 
-        $this->checkOwnerShip($jiri);
+        $this->checkOwnerShip($contact);
 
-        view('jiris.edit', compact('jiri'));
+        view('contacts.edit', compact('contact'));
     }
 
     public function update(): void
@@ -96,12 +93,12 @@ class JiriController
 
         $data = [
             'name' => $_POST['name'],
-            'starting_at' => $_POST['starting_at'],
+            'email' => $_POST['email'],
         ];
 
-        $this->jiri->update($id, $data);
+        $this->contact->update($id, $data);
 
-        Response::redirect('/jiri?id=' . $id);
+        Response::redirect('/contact?id=' . $id);
     }
 
     public function destroy(): void
@@ -112,18 +109,18 @@ class JiriController
         }
         $id = $_POST['id'];
 
-        $this->jiri->delete($id);
+        $this->contact->delete($id);
 
-        Response::redirect('/jiris');
+        Response::redirect('/contacts');
     }
 
-    private function checkOwnerShip(mixed $jiri): void
+    private function checkOwnerShip(mixed $contact): void
     {
-        if (is_numeric($jiri)){
-            $jiri = $this->jiri->findOrFail($jiri);
+        if (is_numeric($contact)) {
+            $contact = $this->contact->findOrFail($contact);
         }
-        if (Auth::id() !== $jiri->user_id) {
-        Response::abort(Response::UNAUTHORIZED);
+        if (Auth::id() !== $contact->user_id) {
+            Response::abort(Response::UNAUTHORIZED);
         }
     }
 }

@@ -23,7 +23,7 @@
     <main class="flex flex-col gap-4">
         <h1 class="font-bold text-2xl">Jiris</h1>
         <?php
-        component('forms.jiris.search'); ?>
+        component('forms.search',['label' => 'Nom du Jiri']); ?>
 
         <section>
             <h2 class="font-bold">Jiris à venir</h2>

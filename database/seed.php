@@ -42,3 +42,22 @@ foreach ($jiris as $jiri) {
 $count_jiris = count($jiris);
 echo "Jiri table seeded with {$count_jiris} jiris" . PHP_EOL;
 
+// Seed Contatc tables
+
+echo 'Seeding Contact table' . PHP_EOL;
+$contacts = [
+    ['name' => 'Vilain Dominique', 'email' => 'dominic@gmail.com', 'user_id' => 1],
+    ['name' => 'Requena Frédéric', 'email' => 'frederic@gmail.com', 'user_id' => 2],
+    ['name' => 'Briol Alexandre', 'email' => 'alex@gmail.com', 'user_id' => 2],
+];
+$insert_contact_in_contacts_table_sql = 'INSERT INTO contacts (name, email, user_id) VALUES (:name, :email, :user_id)';
+$insert_contact_in_contacts_table_stmt = $db->prepare($insert_contact_in_contacts_table_sql);
+foreach ($contacts as $contact) {
+    $insert_contact_in_contacts_table_stmt->bindValue('name', $contact['name']);
+    $insert_contact_in_contacts_table_stmt->bindValue('email', $contact['email']);
+    $insert_contact_in_contacts_table_stmt->bindValue('user_id', $contact['user_id']);
+    $insert_contact_in_contacts_table_stmt->execute();
+}
+$count_contacts = count($contacts);
+echo "Contact table seeded with {$count_contacts} contacts" . PHP_EOL;
+

@@ -119,7 +119,7 @@ class Database extends PDO
         }, array_keys($data)));
 
         $sql = <<<SQL
-            INSERT INTO jiris ($columns)
+            INSERT INTO $this->table ($columns)
             VALUES ($placeholders)
         SQL;
 
